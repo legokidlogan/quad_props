@@ -61,7 +61,7 @@ tallyMatUsages = function()
     for _, quadProp in ipairs( allQuadProps ) do
         local path = quadProp:GetMaterial()
 
-        if path then
+        if path and materialBank[path] then
             pathToUsageCount[path] = ( pathToUsageCount[path] or 0 ) + 1
         end
     end
