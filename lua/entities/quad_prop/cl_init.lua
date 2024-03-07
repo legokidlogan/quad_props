@@ -17,6 +17,7 @@ function ENT:Initialize()
     self.BaseClass.Initialize( self )
 
     self:SetMaterial( self:GetMaterial() )
+    self:_SizeChanged()
 end
 
 function ENT:GetWidth()
