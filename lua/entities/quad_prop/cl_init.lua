@@ -10,7 +10,6 @@ local classMeta = nil
 local rtIncr = 0
 
 local wrapMeta
-local isRTInUse
 
 
 function ENT:Initialize()
@@ -77,10 +76,13 @@ end
 
     rtName: (optional) (string)
         - The name of the RT. Does nothing if it's the same as the current RT name.
-        - Must be different from the RT name of any other quad prop.
         - If not provided, a unique name will be generated.
             - Old auto-generated RTs will not be reused, thus creating a memory leak as RTs are not garbage collected.
             - It is HIGHLY recommended to provide a name to avoid said leak, or guarantee this RT gets used permanently.
+        - Strange behavior may occur if the RT name is not unique.
+            - Only one quad prop's :DrawRT() will be called per unique RT name.
+            - Render hook removal is tied to the RT name, so if the most recent quad prop is removed or changes names, the hook will be removed for all quad props using that RT.
+            - As such, only share RT names if you know they will never be removed or changed.
     rtWidth: (optional) (number)
         - The width of the RT. Defaults to 1024.
         - If not a power of 2, will become the nearest power of 2, as per GetRenderTarget()'s behavior.
@@ -97,10 +99,6 @@ function ENT:UseCustomRT( rtName, rtWidth, rtHeight )
     end
 
     if self._rtName == rtName then return end
-
-    if isRTInUse( rtName ) then
-        error( "RT name already in use", 1 )
-    end
 
     self:SetMaterial( "" )
 
@@ -216,18 +214,4 @@ wrapMeta = function( quadProp )
     end
 
     debug.setmetatable( quadProp, meta )
-end
-
-isRTInUse = function( rtName )
-    local quadProps = ents.FindByClass( "quad_prop" )
-
-    -- Check manually every time instead of tracking manually to avoid potential miscounts (lua autorefresh, EntityRemoved hook breaking from an addon, etc)
-    -- The added perf cost is a non-issue since this function will be very rarely called.
-    for _, quadProp in ipairs( quadProps ) do
-        if quadProp:GetRTName() == rtName then
-            return true
-        end
-    end
-
-    return false
 end
