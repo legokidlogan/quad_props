@@ -123,6 +123,75 @@ function ENT:TestCollision( startPos, delta, isbox )
     }
 end
 
+function ENT:SetWidth( width )
+    if self:IsSquare() then
+        self:SetSize( width, width )
+
+        return
+    end
+
+    width = math.Clamp( width, 1, SIZE_MAX )
+
+    self:SetNWQuadWidth( width )
+    self:_SizeChanged()
+end
+
+function ENT:GetWidth()
+    return self:GetNWQuadWidth()
+end
+
+function ENT:SetHeight( height )
+    if self:IsSquare() then
+        self:SetSize( height, height )
+
+        return
+    end
+
+    height = math.Clamp( height, 1, SIZE_MAX )
+
+    self:SetNWQuadHeight( height )
+    self:_SizeChanged()
+end
+
+function ENT:GetHeight()
+    return self:GetNWQuadHeight()
+end
+
+function ENT:SetSize( width, height )
+    width = math.Clamp( width, 1, SIZE_MAX )
+    height = math.Clamp( height, 1, SIZE_MAX )
+
+    if self:IsSquare() then
+        local minSize = math.min( width, height )
+        width = minSize
+        height = minSize
+    end
+
+    self:SetNWQuadWidth( width )
+    self:SetNWQuadHeight( height )
+
+    self:_SizeChanged()
+end
+
+function ENT:GetSize()
+    return self:GetWidth(), self:GetHeight()
+end
+
+function ENT:SetSquare( isSquare )
+    if isSquare == self:GetNWQuadSquare() then return end
+
+    self:SetNWQuadSquare( isSquare )
+
+    if isSquare then
+        local minSize = math.min( self:GetSize() )
+        self:SetSize( minSize, minSize )
+    end
+end
+
+function ENT:IsSquare()
+    return self:GetNWQuadSquare()
+end
+
 
 ----- PRIVATE FUNCTIONS -----
 

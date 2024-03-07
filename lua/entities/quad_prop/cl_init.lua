@@ -20,24 +20,8 @@ function ENT:Initialize()
     self:_SizeChanged()
 end
 
-function ENT:GetWidth()
-    return self:GetNWQuadWidth()
-end
-
-function ENT:GetHeight()
-    return self:GetNWQuadHeight()
-end
-
-function ENT:GetSize()
-    return self:GetWidth(), self:GetHeight()
-end
-
 function ENT:_SizeChanged()
     self:SetRenderBounds( self:GetQuadBounds() )
-end
-
-function ENT:IsSquare()
-    return self:GetNWQuadSquare()
 end
 
 function ENT:SetMaterial( path )
