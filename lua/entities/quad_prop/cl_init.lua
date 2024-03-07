@@ -30,6 +30,7 @@ function ENT:SetMaterial( path )
 end
 
 function ENT:_SetMaterial( path )
+    self._usingCustomMaterial = false
     self._materialObject = QuadProps.AcquireMaterial( self, path or "" )
 end
 
@@ -39,6 +40,25 @@ end
 
 function ENT:GetMaterialObject()
     return self._materialObject
+end
+
+--[[
+    - Sets a custom material object instead of a material/url path.
+    - Make sure your material has $vertexcolor and $vertexalpha.
+        - These can be set during material creation or with mat:SetInt( "$flags", 16 + 32 )
+    - Make sure your material doesn't have lighting (e.g. don't use the VertexLitGeneric shader)
+--]]
+function ENT:SetCustomMaterial( mat )
+    self:SetMaterial( "" )
+
+    if not mat then return end
+
+    self._usingCustomMaterial = true
+    self._materialObject = mat
+end
+
+function ENT:IsUsingCustomMaterial()
+    return self._usingCustomMaterial
 end
 
 function ENT:Draw()
