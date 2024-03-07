@@ -66,7 +66,10 @@ function ENT:SetupDataTables()
             local height = ent:GetNWQuadHeight()
 
             if width ~= height then
-                ent:SetNWQuadHeight( math.min( width, height ) )
+                local size = math.min( width, height )
+
+                ent:SetNWQuadWidth( size )
+                ent:SetNWQuadHeight( size )
             end
         end )
     else
