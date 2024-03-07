@@ -27,7 +27,7 @@ function ENT:Initialize()
     self:SetModel( self.Model )
     self:DrawShadow( false )
     self:SetCollisionGroup( COLLISION_GROUP_WORLD )
-    self:SetNWQuadSquare( self:GetNWQuadSquare() ) -- gmod moment
+    self:SetSquare( self:IsSquare() ) -- gmod moment
     self:SetSize( self:GetSize() )
     self:SetMaterial( "" )
 end
@@ -45,7 +45,7 @@ function ENT:SpawnFunction( ply, tr )
 
     if IsValid( ent ) then
         ent:SetSize( 50, 50 )
-        ent:SetNWQuadSquare( true )
+        ent:SetSquare( true )
     end
 
     return ent
@@ -69,6 +69,12 @@ function ENT:GetMaterial()
 end
 
 function ENT:SetWidth( width )
+    if self:IsSquare() then
+        self:SetSize( width, width )
+
+        return
+    end
+
     width = math.Clamp( width, 1, SIZE_MAX )
 
     self:SetNWQuadWidth( width )
@@ -80,6 +86,12 @@ function ENT:GetWidth()
 end
 
 function ENT:SetHeight( height )
+    if self:IsSquare() then
+        self:SetSize( height, height )
+
+        return
+    end
+
     height = math.Clamp( height, 1, SIZE_MAX )
 
     self:SetNWQuadHeight( height )
@@ -93,6 +105,12 @@ end
 function ENT:SetSize( width, height )
     width = math.Clamp( width, 1, SIZE_MAX )
     height = math.Clamp( height, 1, SIZE_MAX )
+
+    if self:IsSquare() then
+        local minSize = math.min( width, height )
+        width = minSize
+        height = minSize
+    end
 
     self:SetNWQuadWidth( width )
     self:SetNWQuadHeight( height )
@@ -124,11 +142,26 @@ function ENT:_SizeChanged()
     end
 end
 
+function ENT:SetSquare( isSquare )
+    if isSquare == self:GetNWQuadSquare() then return end
+
+    self:SetNWQuadSquare( isSquare )
+
+    if isSquare then
+        local minSize = math.min( self:GetSize() )
+        self:SetSize( minSize, minSize )
+    end
+end
+
+function ENT:IsSquare()
+    return self:GetNWQuadSquare()
+end
+
 function ENT:OnDuplicated( data )
     local DT = data.DT
     if not DT then return end
 
-    self:SetNWQuadSquare( DT.NWQuadSquare or false )
+    self:SetSquare( DT.NWQuadSquare or false )
     self:SetSize( DT.NWQuadWidth or 50, DT.NWQuadHeight or 50 )
 end
 

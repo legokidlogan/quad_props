@@ -36,6 +36,10 @@ function ENT:_SizeChanged()
     self:SetRenderBounds( self:GetQuadBounds() )
 end
 
+function ENT:IsSquare()
+    return self:GetNWQuadSquare()
+end
+
 function ENT:SetMaterial( path )
     self:_SetMaterial( path )
     self:SetNWQuadMaterial( path )
