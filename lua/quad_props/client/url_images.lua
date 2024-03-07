@@ -138,7 +138,7 @@ doNextInQueue = function() -- Taken and cleaned up from StarfallEX
                 if not mat then return end
 
                 render.PushRenderTarget( requestTbl.RT )
-                    render.Clear( 0, 0, 0, 1, false, false )
+                    render.Clear( 0, 0, 0, 0, false, false )
                     cam.Start2D()
                     surface.SetMaterial( mat )
                     surface.SetDrawColor( 255, 255, 255 )
