@@ -32,6 +32,7 @@ function QuadProps.AcquireMaterial( quadProp, path )
     local mat = getFreeMaterial( curPath )
 
     if string.StartsWith( path, "http" ) then
+        mat:SetInt( "$flags", 16 + 32 )
         QuadProps.LoadMaterialURL( mat, path )
     else
         QuadProps.CancelMaterialURL( mat )
