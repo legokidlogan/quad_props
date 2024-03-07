@@ -13,10 +13,11 @@ local makeUnlitCopy
 
 --[[
     - Finds or creates a free material in the material bank, modifies it with the new path, then returns the material.
+    - Note: this function acquires the material, but does not apply it to the quad prop directly.
+        - As such, manual usage of this function is not recommended.
 
     quadProp: (Entity)
         - The quad prop whose path is being changed.
-        - Note: this function acquires the material, but does not apply it to the quad prop directly.
     path: (string)
         - The new path (existing material path, or image url) to apply.
 --]]
