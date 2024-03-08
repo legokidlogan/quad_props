@@ -5,9 +5,11 @@ CreateConVar( "sbox_maxquad_prop", 10, { FCVAR_ARCHIVE, FCVAR_REPLICATED }, "The
 
 AddCSLuaFile( "quad_props/client/url_images.lua" )
 AddCSLuaFile( "quad_props/client/utils.lua" )
+AddCSLuaFile( "quad_props/client/settings.lua" )
 
 
 if CLIENT then
     include( "quad_props/client/url_images.lua" )
     include( "quad_props/client/utils.lua" )
+    include( "quad_props/client/settings.lua" )
 end

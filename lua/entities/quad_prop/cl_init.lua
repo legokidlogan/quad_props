@@ -32,6 +32,7 @@ end
 
 function ENT:_SetMaterial( path )
     local rtName = self._rtName
+    path = path or ""
 
     if rtName then
         hook.Remove( "PreRender", "QuadProps_DrawCustomRT_" .. rtName )
@@ -40,7 +41,8 @@ function ENT:_SetMaterial( path )
     self._usingCustomMaterial = false
     self._usingCustomRT = false
     self._rtName = nil
-    self._materialObject = QuadProps.AcquireMaterial( self, path or "" )
+    self._usingURL = string.StartsWith( path, "http" )
+    self._materialObject = QuadProps.AcquireMaterial( self, path )
 end
 
 function ENT:GetMaterial()
@@ -49,6 +51,10 @@ end
 
 function ENT:GetMaterialObject()
     return self._materialObject
+end
+
+function ENT:IsUsingURL()
+    return self._usingURL
 end
 
 --[[

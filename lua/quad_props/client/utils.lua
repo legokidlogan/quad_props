@@ -5,6 +5,7 @@ local MATERIAL_DEFAULT = Material( "vgui/white" )
 local materialBank = {}
 local materialIncr = 0
 
+local getOwner
 local createFreeMaterial
 local tallyMatUsages
 local getFreeMaterial
@@ -34,7 +35,7 @@ function QuadProps.AcquireMaterial( quadProp, path )
 
     if string.StartsWith( path, "http" ) then
         mat:SetInt( "$flags", 16 + 32 )
-        QuadProps.LoadMaterialURL( mat, path )
+        QuadProps.LoadMaterialURL( mat, path, getOwner( quadProp ) )
     else
         QuadProps.CancelMaterialURL( mat )
         makeUnlitCopy( mat, path )
@@ -47,6 +48,16 @@ end
 
 
 ----- PRIVATE FUNCTIONS -----
+
+getOwner = function( ent )
+    local cppiGetOwner = ent.CPPIGetOwner
+
+    if cppiGetOwner then
+        return cppiGetOwner( ent )
+    end
+
+    return ent:GetOwner()
+end
 
 createFreeMaterial = function()
     materialIncr = materialIncr + 1

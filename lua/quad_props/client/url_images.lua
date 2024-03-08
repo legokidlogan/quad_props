@@ -1,5 +1,7 @@
 QuadProps = QuadProps or {}
 
+local TEXTURE_BLOCKED = GetRenderTarget( "quad_props_blocked", 128, 128 )
+
 local imageQueue = {}
 
 local doNextInQueue
@@ -20,20 +22,27 @@ function QuadProps.CancelMaterialURL( mat )
 end
 
 -- Queues a material to be loaded from a URL.
-function QuadProps.LoadMaterialURL( mat, url )
+function QuadProps.LoadMaterialURL( mat, url, requestingPlayer )
     if string.len( url ) > 400 then
         -- URL is too long
-        mat:setTexture( "$basetexture", "error" )
+        mat:SetTexture( "$basetexture", "error" )
 
-        return
+        return false, 1
+    end
+
+    QuadProps.CancelMaterialURL( mat )
+
+    if not QuadProps.CanLoadURLFromPlayer( requestingPlayer ) then
+        -- Player is not allowed to load URLs
+        mat:SetTexture( "$basetexture", TEXTURE_BLOCKED )
+
+        return false, 2
     end
 
     local name = mat:GetName()
     local rt = GetRenderTarget( name, 1024, 1024 )
 
     mat:SetTexture( "$basetexture", rt )
-
-    QuadProps.CancelMaterialURL( mat )
 
     url = string.gsub( url, "[^%w _~%.%-/:=%?&]", function( str )
         return string.format( "%%%02X", string.byte( str ) )
@@ -51,6 +60,8 @@ function QuadProps.LoadMaterialURL( mat, url )
     imageQueue[inqueue + 1] = requestTbl
 
     if inqueue == 0 then timer.Simple( 0, doNextInQueue ) end
+
+    return true
 end
 
 
@@ -201,3 +212,27 @@ doNextInQueue = function() -- Taken and cleaned up from StarfallEX
         doNextInQueue()
     end )
 end
+
+
+----- SETUP -----
+
+hook.Add( "InitPostEntity", "QuadProps_CreateBlockedTexture", function()
+    hook.Remove( "InitPostEntity", "QuadProps_CreateBlockedTexture" )
+
+    hook.Add( "PreRender", "QuadProps_CreateBlockedTexture", function()
+        hook.Remove( "PreRender", "QuadProps_CreateBlockedTexture" )
+
+        local oldW, oldH = ScrW(), ScrH()
+
+        render.PushRenderTarget( TEXTURE_BLOCKED )
+            render.SetViewPort( 0, 0, 128, 128 )
+            cam.Start2D()
+
+            render.Clear( 0, 0, 0, 255 )
+            draw.SimpleText( "BLOCKED", "CloseCaption_Bold", 64, 64, Color( 255, 255, 255, 255 ), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+
+            cam.End2D()
+            render.SetViewPort( 0, 0, oldW, oldH )
+        render.PopRenderTarget()
+    end )
+end )
