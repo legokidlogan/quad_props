@@ -170,9 +170,8 @@ cvars.AddChangeCallback( "quad_props_whitelist_mode", function( _, _, new )
     whitelistMode = new ~= "0"
 
     if selectedPlayerList then
-        local selectedPlayerListTitle = whitelistMode and "Whitelisted players" or "Blacklisted players"
+        local selectedPlayerListTitle = whitelistMode and "URL Whitelisted players" or "URL Blacklisted players"
 
-        --selectedPlayerList:GetChildren()[2]:SetName( selectedPlayerListTitle )
         selectedPlayerListTitlePanel:SetName( selectedPlayerListTitle )
     end
 
@@ -191,7 +190,7 @@ hook.Add( "PopulateToolMenu", "QuadProps_PopulateToolMenu", function()
         panel:CheckBox( "Block all URLs", "quad_props_block_all_urls" )
         panel:CheckBox( "Use player list as a whitelist", "quad_props_whitelist_mode" )
 
-        local selectedPlayerListTitle = whitelistMode and "Whitelisted players" or "Blacklisted players"
+        local selectedPlayerListTitle = whitelistMode and "URL Whitelisted players" or "URL Blacklisted players"
 
         selectedPlayerList, selectedPlayerListTitlePanel = addListView( panel, selectedPlayerListTitle, function( steamID )
             steamIDLookup[steamID] = nil
