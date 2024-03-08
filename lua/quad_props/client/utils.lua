@@ -1,6 +1,11 @@
 QuadProps = QuadProps or {}
 
-local MATERIAL_DEFAULT = Material( "vgui/white" )
+local MATERIAL_DEFAULT = CreateMaterial( "quad_props_white", "UnlitGeneric", {
+    ["$vertexcolor"] = 1,
+    ["$vertexalpha"] = 1,
+    ["$translucent"] = 1,
+    ["$color"] = "[1 1 1]",
+} )
 
 local materialBank = {}
 local materialIncr = 0
