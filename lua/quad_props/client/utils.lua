@@ -133,9 +133,9 @@ makeUnlitCopy = function( mat, path )
 
     if tex then
         mat:SetTexture( "$basetexture", tex )
-    else
-        mat:SetVector( "$color", refMat:GetVector( "$color" ) )
-        mat:SetVector( "$color2", refMat:GetVector( "$color2" ) )
-        mat:SetFloat( "$alpha", refMat:GetFloat( "$alpha" ) )
     end
+
+    mat:SetVector( "$color", refMat:GetVector( "$color" ) )
+    mat:SetVector( "$color2", refMat:GetVector( "$color2" ) )
+    mat:SetFloat( "$alpha", refMat:GetFloat( "$alpha" ) )
 end
