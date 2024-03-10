@@ -10,6 +10,7 @@ local classMeta = nil
 local rtIncr = 0
 
 local wrapMeta
+local getQuadCorners
 
 
 function ENT:Initialize()
@@ -161,16 +162,15 @@ end
 
 function ENT:DrawQuad()
     local mat = self:GetMaterialObject()
-    local pos = self:GetPos()
-    local ang = self:GetAngles()
-    local width, height = self:GetSize()
     local color = self:GetColor()
-
-    local normal = ang:Forward()
-    local roll = ang[3] + 180
+    local topLeft, topRight, bottomRight, bottomLeft = getQuadCorners( self )
 
     render.SetMaterial( mat )
-    render.DrawQuadEasy( pos, normal, width, height, color, roll )
+    render.DrawQuad( topLeft, topRight, bottomRight, bottomLeft, color )
+
+    if self:IsDoubleSided() then
+        render.DrawQuad( topRight, topLeft, bottomLeft, bottomRight, color )
+    end
 end
 
 
@@ -220,4 +220,22 @@ wrapMeta = function( quadProp )
     end
 
     debug.setmetatable( quadProp, meta )
+end
+
+getQuadCorners = function( quad )
+    local pos = quad:GetPos()
+    local width, height = quad:GetSize()
+    local ang = quad:GetAngles()
+
+    local topLeftX = -width * 0.5
+    local topLeftY = -height * 0.5
+
+    local rectRight = -ang:Right()
+    local rectDown = -ang:Up()
+
+    return
+        pos + rectRight * topLeftX + rectDown * topLeftY, -- Top left (from viewer's perspective)
+        pos + rectRight * ( topLeftX + width ) + rectDown * topLeftY, -- Top right
+        pos + rectRight * ( topLeftX + width ) + rectDown * ( topLeftY + height ), -- Bottom right
+        pos + rectRight * topLeftX + rectDown * ( topLeftY + height ) -- Bottom left
 end

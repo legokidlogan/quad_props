@@ -29,6 +29,7 @@ function ENT:Initialize()
     self:SetSquare( self:IsSquare() ) -- gmod moment
     self:SetSize( self:GetSize() )
     self:SetMaterial( "" )
+    self:SetDoubleSided( self:IsDoubleSided() )
 end
 
 function ENT:SpawnFunction( ply, tr )
@@ -93,6 +94,7 @@ function ENT:OnDuplicated( data )
 
     self:SetSquare( DT.NWQuadSquare or false )
     self:SetSize( DT.NWQuadWidth or 50, DT.NWQuadHeight or 50 )
+    self:SetDoubleSided( DT.NWQuadDoubleSided or false )
 end
 
 
