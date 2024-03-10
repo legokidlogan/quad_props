@@ -133,6 +133,7 @@ makeUnlitCopy = function( mat, path )
 
     if tex then
         mat:SetTexture( "$basetexture", tex )
+        mat:SetMatrix( "$basetexturetransform", refMat:GetMatrix( "$basetexturetransform" ) )
     end
 
     mat:SetVector( "$color", refMat:GetVector( "$color" ) )
