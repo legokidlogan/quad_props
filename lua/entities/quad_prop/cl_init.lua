@@ -29,11 +29,11 @@ function ENT:_SizeChanged()
 end
 
 function ENT:SetMaterial( path )
-    self:_SetMaterial( path )
+    self:_SetMaterialInternal( path )
     self:SetNWQuadMaterial( path )
 end
 
-function ENT:_SetMaterial( path )
+function ENT:_SetMaterialInternal( path )
     local rtName = self._rtName
     path = path or ""
 
@@ -193,7 +193,7 @@ end
 wrapMeta = function( quadProp )
     if not entMeta then
         entMeta = FindMetaTable( "Entity" )
-        entity_SetMaterial = entMeta.SetMaterial
+        entity_SetMaterialInternal = entMeta.SetMaterial
 
         classMeta = baseclass.Get( "quad_prop" )
     end

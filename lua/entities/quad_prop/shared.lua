@@ -83,7 +83,7 @@ function ENT:SetupDataTables()
         end )
 
         self:NetworkVarNotify( "NWQuadMaterial", function( ent, _, _, path )
-            ent:_SetMaterial( path )
+            ent:_SetMaterialInternal( path )
         end )
     end
 end
