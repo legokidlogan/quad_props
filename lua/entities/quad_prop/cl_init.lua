@@ -5,6 +5,8 @@ DEFINE_BASECLASS( "base_gmodentity" )
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
 
+local MATERIAL_ERROR = Material( "error" )
+
 local entMeta = nil
 local classMeta = nil
 local rtIncr = 0
@@ -161,7 +163,7 @@ function ENT:DrawTranslucent()
 end
 
 function ENT:DrawQuad()
-    local mat = self:GetMaterialObject()
+    local mat = self:GetMaterialObject() or MATERIAL_ERROR
     local color = self:GetColor()
     local topLeft, topRight, bottomRight, bottomLeft = getQuadCorners( self )
 
