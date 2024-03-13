@@ -103,7 +103,7 @@ rebuildListPanels = function()
 
     selectedPlayerList:Clear()
 
-    for _, steamID in pairs( steamIDLookup ) do
+    for steamID in pairs( steamIDLookup ) do
         local ply = steamIDToPlayer[steamID]
 
         if IsValid( ply ) then
