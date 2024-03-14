@@ -90,10 +90,13 @@ end
 
 
 local Panel
+local processingRequest = false
 doNextInQueue = function() -- Taken and cleaned up from StarfallEX
     if not Panel then
         Panel = QuadProps._URLTextureLoader
         if not Panel then
+            processingRequest = false
+
             Panel = vgui.Create( "DHTML" )
             Panel:SetSize( 1024, 1024 )
             Panel:SetAlpha( 0 )
@@ -127,6 +130,8 @@ doNextInQueue = function() -- Taken and cleaned up from StarfallEX
         end
     end
 
+    if processingRequest then return end
+
     local requestTbl = table.remove( imageQueue, 1 )
 
     if not requestTbl then
@@ -135,6 +140,8 @@ doNextInQueue = function() -- Taken and cleaned up from StarfallEX
 
         return
     end
+
+    processingRequest = true
 
     local function applyTexture( w, h )
         local function imageDone()
@@ -157,6 +164,7 @@ doNextInQueue = function() -- Taken and cleaned up from StarfallEX
                     cam.End2D()
                 render.PopRenderTarget()
 
+                processingRequest = false
                 hook.Remove( "PreRender", "QuadProps_HTMLPanelCopyTexture" )
                 timer.Remove( "QuadProps_URLTextureTimeout" )
                 timer.Simple( 0, doNextInQueue ) -- Timer to prevent being in javascript stack frame
@@ -192,6 +200,7 @@ doNextInQueue = function() -- Taken and cleaned up from StarfallEX
         timer.Remove( "QuadProps_URLTextureTimeout" )
 
         timer.Simple( 0, function() -- Timer to prevent being in javascript stack frame
+            processingRequest = false
             requestTbl.Material:SetTexture( "$basetexture", "error" )
             doNextInQueue()
         end )
@@ -210,6 +219,8 @@ doNextInQueue = function() -- Taken and cleaned up from StarfallEX
     Panel:Show()
 
     timer.Create( "QuadProps_URLTextureTimeout", 10, 1, function()
+        processingRequest = false
+
         if requestTbl.Material then
             requestTbl.Material:SetTexture( "$basetexture", "error" )
         end
