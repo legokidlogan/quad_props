@@ -158,6 +158,7 @@ doNextInQueue = function() -- Taken and cleaned up from StarfallEX
                 render.PopRenderTarget()
 
                 hook.Remove( "PreRender", "QuadProps_HTMLPanelCopyTexture" )
+                timer.Remove( "QuadProps_URLTextureTimeout" )
                 timer.Simple( 0, doNextInQueue ) -- Timer to prevent being in javascript stack frame
             end )
         end
@@ -188,6 +189,8 @@ doNextInQueue = function() -- Taken and cleaned up from StarfallEX
     end
 
     local function errorTexture()
+        timer.Remove( "QuadProps_URLTextureTimeout" )
+
         timer.Simple( 0, function() -- Timer to prevent being in javascript stack frame
             requestTbl.Material:SetTexture( "$basetexture", "error" )
             doNextInQueue()
@@ -207,7 +210,9 @@ doNextInQueue = function() -- Taken and cleaned up from StarfallEX
     Panel:Show()
 
     timer.Create( "QuadProps_URLTextureTimeout", 10, 1, function()
-        if requestTbl.Callback then requestTbl.Callback() end
+        if requestTbl.Material then
+            requestTbl.Material:SetTexture( "$basetexture", "error" )
+        end
 
         doNextInQueue()
     end )
