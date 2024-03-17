@@ -9,3 +9,6 @@ However, developers can use `:SetCustomMaterial( mat )` clientside to use their 
 Developers can also use `:UseCustomRT( rtName, rtWidth, rtHeight )` and override `:DrawRT()` for super easy RT drawing.
 
 Per-player quad_prop limits can be set with the `sbox_maxquad_prop` serverside convar, 10 by default.
+
+To protect against players loading IP grabbers on other clients, there is a simplistic, non-configurable url whitelist built in.
+If you server uses [CFC HTTP Whitelist](https://github.com/CFC-Servers/cfc_cl_http_whitelist), then it will defer to that instead, allowing for whitelist customization.
