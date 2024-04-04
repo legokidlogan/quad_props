@@ -7,8 +7,7 @@ ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
 local MATERIAL_ERROR = Material( "error" )
 
-local entMeta = nil
-local classMeta = nil
+local quadPropMeta = nil
 local rtIncr = 0
 
 local wrapMeta
@@ -191,37 +190,15 @@ end
 
 -- Sadly, this is the only way to wrap :SetCollisionGroup() and similar function without wrapping the entire Entity metatable.
 wrapMeta = function( quadProp )
-    if not entMeta then
-        entMeta = FindMetaTable( "Entity" )
-        entity_SetMaterialInternal = entMeta.SetMaterial
+    if not quadPropMeta then
+        local classMeta = baseclass.Get( "quad_prop" )
 
-        classMeta = baseclass.Get( "quad_prop" )
+        quadPropMeta = QuadProps._QuadPropMeta
+        rawset( quadPropMeta, "SetMaterial", classMeta.SetMaterial )
+        rawset( quadPropMeta, "GetMaterial", classMeta.GetMaterial )
     end
 
-    local index = rawget( entMeta, "__index" ) or function() end
-    local newindex = rawget( entMeta, "__newindex" ) or function() end
-    local meta = {
-        __tostring = rawget( entMeta, "__tostring" ),
-
-        SetMaterial = classMeta.SetMaterial,
-        GetMaterial = classMeta.GetMaterial,
-    }
-
-    meta.__index = function( self, key )
-        local override = meta[key]
-        if override ~= nil then return override end
-
-        return index( self, key )
-    end
-
-    meta.__newindex = function( self, key, value )
-        local override = meta[key]
-        if override ~= nil then return override( self, key, value ) end
-
-        return newindex( self, key, value )
-    end
-
-    debug.setmetatable( quadProp, meta )
+    debug.setmetatable( quadProp, quadPropMeta )
 end
 
 getQuadCorners = function( quad )

@@ -9,9 +9,8 @@ local THICKNESS = 1
 
 local THICKNESS_HALF = THICKNESS / 2
 
-local entMeta = nil
+local quadPropMeta = nil
 local entity_SetCollisionGroup = nil
-local classMeta = nil
 
 local wrapMeta
 local makeQuadProp
@@ -102,38 +101,19 @@ end
 
 -- Sadly, this is the only way to wrap :SetCollisionGroup() and similar function without wrapping the entire Entity metatable.
 wrapMeta = function( quadProp )
-    if not entMeta then
-        entMeta = FindMetaTable( "Entity" )
+    if not quadPropMeta then
+        local entMeta = FindMetaTable( "Entity" )
         entity_SetCollisionGroup = entMeta.SetCollisionGroup
 
-        classMeta = baseclass.Get( "quad_prop" )
+        local classMeta = baseclass.Get( "quad_prop" )
+
+        quadPropMeta = QuadProps._QuadPropMeta
+        rawset( quadPropMeta, "SetCollisionGroup", classMeta.SetCollisionGroup )
+        rawset( quadPropMeta, "SetMaterial", classMeta.SetMaterial )
+        rawset( quadPropMeta, "GetMaterial", classMeta.GetMaterial )
     end
 
-    local index = rawget( entMeta, "__index" ) or function() end
-    local newindex = rawget( entMeta, "__newindex" ) or function() end
-    local meta = {
-        __tostring = rawget( entMeta, "__tostring" ),
-
-        SetCollisionGroup = classMeta.SetCollisionGroup,
-        SetMaterial = classMeta.SetMaterial,
-        GetMaterial = classMeta.GetMaterial,
-    }
-
-    meta.__index = function( self, key )
-        local override = meta[key]
-        if override ~= nil then return override end
-
-        return index( self, key )
-    end
-
-    meta.__newindex = function( self, key, value )
-        local override = meta[key]
-        if override ~= nil then return override( self, key, value ) end
-
-        return newindex( self, key, value )
-    end
-
-    debug.setmetatable( quadProp, meta )
+    debug.setmetatable( quadProp, quadPropMeta )
 end
 
 makeQuadProp = function( ply, data )
