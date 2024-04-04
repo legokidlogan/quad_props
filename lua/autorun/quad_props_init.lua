@@ -1,7 +1,7 @@
 QuadProps = QuadProps or {}
 
 
-CreateConVar( "sbox_maxquad_prop", 10, { FCVAR_ARCHIVE, FCVAR_REPLICATED }, "The max number of quad props per player.", 1, 100 )
+CreateConVar( "sbox_maxquad_prop", 10, { FCVAR_ARCHIVE, FCVAR_REPLICATED }, "The max number of quad props per player.", 1, 1000 )
 
 AddCSLuaFile( "quad_props/create_meta.lua" )
 
