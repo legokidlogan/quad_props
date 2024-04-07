@@ -105,8 +105,9 @@ end
 -- @param Angle ang The angle to create the quadprop
 -- @param number? width (Optional) The width to give the quadprop (Default 50)
 -- @param number? height (Optional) The height to give the quadprop (Default width)
+-- @param boolean? frozen (Optional, server only) Whether the quadprop should be frozen (Default false)
 -- @return QuadProp The quadprop object
-function quadprop_library.create( pos, ang, width, height )
+function quadprop_library.create( pos, ang, width, height, frozen )
     checkpermission( instance, nil, "quadprop.create" )
 
     local ply = instance.player
@@ -139,6 +140,10 @@ function quadprop_library.create( pos, ang, width, height )
 
             qpEnt:SetSquare( false )
             qpEnt:SetSize( width, height )
+
+            if frozen then
+                qpEnt:GetPhysicsObject():EnableMotion( false )
+            end
 
             entList:register( instance, qpEnt )
 
