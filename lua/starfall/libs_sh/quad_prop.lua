@@ -92,7 +92,7 @@ end
 
 --- Casts a quadprop entity into the quadprop type
 -- @shared
--- @return Hologram Hologram instance
+-- @return QuadProp QuadProp instance
 function ents_methods:toQuadProp()
     local ent = getent( self )
     if not ent.IsSFQuadProp then SF.Throw( "The entity isn't a quadprop", 2 ) end
@@ -103,10 +103,9 @@ end
 --- Creates a quadprop.
 -- @param Vector pos The position to create the quadprop
 -- @param Angle ang The angle to create the quadprop
--- @param string model The model to give the quadprop
 -- @param number? width (Optional) The width to give the quadprop (Default 50)
 -- @param number? height (Optional) The height to give the quadprop (Default width)
--- @return Hologram The quadprop object
+-- @return QuadProp The quadprop object
 function quadprop_library.create( pos, ang, width, height )
     checkpermission( instance, nil, "quadprop.create" )
 
