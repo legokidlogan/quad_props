@@ -19,6 +19,7 @@ function ENT:Initialize()
 
     self.BaseClass.Initialize( self )
 
+    self:SetModel( self.Model )
     self:SetMaterial( self:GetMaterial() )
     self:_SizeChanged()
 end
