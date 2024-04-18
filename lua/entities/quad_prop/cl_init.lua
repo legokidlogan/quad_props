@@ -19,7 +19,10 @@ function ENT:Initialize()
 
     self.BaseClass.Initialize( self )
 
-    self:SetModel( self.Model )
+    if self:EntIndex() == -1 then
+        self:SetModel( self.Model )
+    end
+
     self:SetMaterial( self:GetMaterial() )
     self:_SizeChanged()
 end
