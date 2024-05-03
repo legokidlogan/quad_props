@@ -72,7 +72,7 @@ end )
 
 instance:AddHook( "deinitialize", function()
     if SERVER or not instance.data.render.isRendering then
-        entList:deinitialize( instance, true )
+        entList:deinitialize( instance, CLIENT or instance.data.props.clean )
     else
         -- Removing objects in render hook = crash
         timer.Simple( 0, function()
@@ -146,6 +146,15 @@ function quadprop_library.create( pos, ang, width, height, frozen )
             end
 
             entList:register( instance, qpEnt )
+
+            if instance.data.props.undo then
+                undo.Create( "quad_prop" )
+                    undo.SetPlayer( ply )
+                    undo.AddEntity( qpEnt )
+                undo.Finish( "quad_prop" )
+            end
+
+            ply:AddCleanup( "quad_prop", qpEnt )
 
             return wrap( qpEnt )
         end
