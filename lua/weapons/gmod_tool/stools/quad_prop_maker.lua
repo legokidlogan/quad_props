@@ -6,6 +6,7 @@ TOOL.ClientConVar["wall_dist"] = 1
 
 TOOL.Information = {
     { name = "left_0", stage = 0, op = 0 },
+    { name = "left_0_use", stage = 0, op = 0 },
     { name = "left_1", stage = 1, op = 1 },
     { name = "left_1_use", stage = 1, op = 1 },
     { name = "right_0", stage = 0, op = 0 },
@@ -20,6 +21,7 @@ if CLIENT then
     language.Add( "tool.quad_prop_maker.name", "Quad Prop Maker" )
     language.Add( "tool.quad_prop_maker.desc", "Creates quad props" )
     language.Add( "tool.quad_prop_maker.left_0", "Select the first corner (aligns with the surface)" )
+    language.Add( "tool.quad_prop_maker.left_0_use", "Select the first corner (aligns perpendicular to the surface)" )
     language.Add( "tool.quad_prop_maker.left_1", "Select the second corner" )
     language.Add( "tool.quad_prop_maker.left_1_use", "Select the second corner (rotates with your aim, use on floors/ceilings)" )
     language.Add( "tool.quad_prop_maker.right_0", "Select the first corner (aligns vertically)" )
@@ -102,6 +104,18 @@ function TOOL:LeftClick( tr )
     if self:GetStage() == 0 then
         local hitNormal = tr.HitNormal
         if hitNormal == VECTOR_ZERO then return false end
+
+        if self:GetOwner():KeyDown( IN_USE ) then
+            hitNormal = hitNormal:Angle():Right()
+
+            local _, eyeDir = getTraceStartAndDir( tr )
+            if not eyeDir then return false end
+
+            -- Face towards the player
+            if eyeDir:Dot( hitNormal ) > 0 then
+                hitNormal = -hitNormal
+            end
+        end
 
         self:SetObject( 0, game.GetWorld(), tr.HitPos, nil, 0, hitNormal )
         self:SetOperation( 1 )
