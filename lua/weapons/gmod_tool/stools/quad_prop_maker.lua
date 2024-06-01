@@ -1,6 +1,7 @@
 TOOL.Category = "Construction"
 TOOL.Name = "Quad Prop Maker"
 
+TOOL.ClientConVar["double_sided"] = 0
 TOOL.ClientConVar["wall_dist"] = 1
 
 TOOL.Information = {
@@ -26,6 +27,8 @@ if CLIENT then
     language.Add( "tool.quad_prop_maker.right_1_use", "Determine the width (ignore line of sight)" )
     language.Add( "tool.quad_prop_maker.right_2", "Determine the height" )
     language.Add( "tool.quad_prop_maker.reload", "Remove a quad prop" )
+
+    language.Add( "tool.quad_prop_maker.double_sided", "Double-Sided" )
 
     language.Add( "tool.quad_prop_maker.wall_dist", "Wall Distance" )
     language.Add( "tool.quad_prop_maker.wall_dist.help", "How far away from the wall/floor to spawn the quad prop" )
@@ -181,6 +184,7 @@ function TOOL:Deploy()
 end
 
 function TOOL.BuildCPanel( cPanel )
+    cPanel:AddControl( "CheckBox", { Label = "#tool.quad_prop_maker.double_sided", Command = "quad_prop_maker_double_sided", Help = false } )
     cPanel:AddControl( "Slider", { Label = "#tool.quad_prop_maker.wall_dist", Command = "quad_prop_maker_wall_dist", Type = "Float", Min = -1000, Max = 1000, Help = true } )
 end
 
@@ -313,7 +317,7 @@ function TOOL:MakeQuadProp( tr )
 
     ent:SetSquare( false )
     ent:SetSize( width, height )
-    ent:SetDoubleSided( false )
+    ent:SetDoubleSided( self:GetClientNumber( "double_sided", 0 ) ~= 0 )
     if CPPI then ent:CPPISetOwner( owner ) end
 
     owner:AddCount( "quad_prop", ent )
