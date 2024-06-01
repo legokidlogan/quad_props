@@ -13,8 +13,8 @@ ENT.Model           = "models/hunter/blocks/cube1x1x1.mdl"
 ENT.Editable        = true
 
 
-local SIZE_MAX = 1000
-local THICKNESS = 1
+local SIZE_MAX = QuadProps.SIZE_MAX
+local THICKNESS = QuadProps.THICKNESS
 
 local THICKNESS_HALF = THICKNESS / 2
 

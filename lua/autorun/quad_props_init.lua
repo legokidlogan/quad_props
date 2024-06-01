@@ -1,4 +1,6 @@
 QuadProps = QuadProps or {}
+QuadProps.SIZE_MAX = 1000
+QuadProps.THICKNESS = 1
 
 
 CreateConVar( "sbox_maxquad_prop", 10, { FCVAR_ARCHIVE, FCVAR_REPLICATED }, "The max number of quad props per player.", 1, 1000 )
