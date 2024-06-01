@@ -183,6 +183,13 @@ function TOOL:Deploy()
     return true
 end
 
+function TOOL:Think()
+    -- Account for :Deploy() not being called when switching tools via the q menu while already holding the toolgun SWEP
+    if CLIENT and not self._previewActive then
+        self:StartPreview()
+    end
+end
+
 function TOOL.BuildCPanel( cPanel )
     cPanel:AddControl( "CheckBox", { Label = "#tool.quad_prop_maker.double_sided", Command = "quad_prop_maker_double_sided", Help = false } )
     cPanel:AddControl( "Slider", { Label = "#tool.quad_prop_maker.wall_dist", Command = "quad_prop_maker_wall_dist", Type = "Float", Min = -1000, Max = 1000, Help = true } )
@@ -338,6 +345,8 @@ function TOOL:StartPreview()
 
     local selfObj = self
 
+    self._previewActive = true
+
     hook.Add( "PostDrawOpaqueRenderables", "QuadProps_Toolgun_QuadPropMaker_DrawPreview", function( _, skybox, skybox3d )
         if skybox or skybox3d then return end
 
@@ -392,6 +401,8 @@ end
 
 function TOOL:StopPreview()
     if SERVER then return end
+
+    self._previewActive = false
 
     hook.Remove( "PostDrawOpaqueRenderables", "QuadProps_Toolgun_QuadPropMaker_DrawPreview" )
 end
