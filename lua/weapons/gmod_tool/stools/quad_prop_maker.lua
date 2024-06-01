@@ -215,7 +215,7 @@ function TOOL:CalcSpawnInfo( tr )
         if self:GetOwner():KeyDown( IN_USE ) then
             -- Project the eye direction onto the plane and use it as the up direction
             -- Ideal for use on floors and ceilings
-            upDir = eyeDir - eyeDir:Dot( cornerNormal1 ) * cornerNormal1 -- Project eyeVec onto the plane
+            upDir = eyeDir - eyeDir:Dot( cornerNormal1 ) * cornerNormal1 -- Project eyeDir onto the plane
 
             local upDirLength = upDir:Length()
             if upDirLength == 0 then return end
@@ -339,7 +339,7 @@ function TOOL:StartPreview()
 
         local wep = selfObj:GetWeapon()
         if not IsValid( wep ) or wep:GetMode() ~= "quad_prop_maker" then
-            self:StopPreview()
+            selfObj:StopPreview()
 
             return
         end
