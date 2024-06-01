@@ -181,7 +181,7 @@ function TOOL:Deploy()
 end
 
 function TOOL.BuildCPanel( cPanel )
-    cPanel:AddControl( "Slider", { Label = "#tool.quad_prop_maker.wall_dist", Command = "quad_prop_maker_wall_dist", Type = "Float", Min = 0, Max = 10000, Help = true } )
+    cPanel:AddControl( "Slider", { Label = "#tool.quad_prop_maker.wall_dist", Command = "quad_prop_maker_wall_dist", Type = "Float", Min = -1000, Max = 1000, Help = true } )
 end
 
 
