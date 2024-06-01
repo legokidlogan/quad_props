@@ -356,16 +356,15 @@ function TOOL:StartPreview()
 
         -- Extra preview helpers
         if selfObj:GetOperation() == 2 and selfObj:GetStage() == 1 then
-            local cornerPos1 = selfObj:GetPos( 0 )
+            local cornerPos1 = selfObj:GetPos( 0 ) + ang:Forward() * selfObj:GetClientNumber( "wall_dist", 1 )
 
             render.DrawBox( cornerPos1 + VECTOR_UP, ANGLE_ZERO, PREVIEW_PLANE_MINS, PREVIEW_PLANE_MAXS, PREVIEW_COLOR_PLANE )
 
             if not LocalPlayer():KeyDown( IN_USE ) then
-                local cornerPos1ToCenter = pos - cornerPos1
-                cornerPos1ToCenter[3] = 0
-                local cornerPos3 = cornerPos1 + cornerPos1ToCenter * 2
+                local hitPos = tr.HitPos
+                local hitPosAtZ = Vector( hitPos[1], hitPos[2], cornerPos1[3] )
 
-                render.DrawLine( tr.HitPos, cornerPos3, PREVIEW_COLOR_LINE, false )
+                render.DrawLine( hitPos, hitPosAtZ, PREVIEW_COLOR_LINE, false )
             end
         end
 
