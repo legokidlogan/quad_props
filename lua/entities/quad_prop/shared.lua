@@ -22,8 +22,8 @@ local delaySizeUpdate
 
 
 function ENT:SetupDataTables()
-    self:NetworkVar( "Int",     0, "NWQuadWidth",          { KeyName = "quad_width",        Edit = { type = "Float",   title = "Width",        order = 1, min = 1, max = SIZE_MAX } } )
-    self:NetworkVar( "Int",     1, "NWQuadHeight",         { KeyName = "quad_height",       Edit = { type = "Float",   title = "Height",       order = 2, min = 1, max = SIZE_MAX } } )
+    self:NetworkVar( "Float",   0, "NWQuadWidth",          { KeyName = "quad_width",        Edit = { type = "Float",   title = "Width",        order = 1, min = 1, max = SIZE_MAX } } )
+    self:NetworkVar( "Float",   1, "NWQuadHeight",         { KeyName = "quad_height",       Edit = { type = "Float",   title = "Height",       order = 2, min = 1, max = SIZE_MAX } } )
     self:NetworkVar( "Bool",    0, "NWQuadSquare",         { KeyName = "quad_square",       Edit = { type = "Boolean", title = "Square",       order = 3,                         } } )
     self:NetworkVar( "Bool",    1, "NWQuadDoubleSided",    { KeyName = "quad_double_sided", Edit = { type = "Boolean", title = "Double Sided", order = 4,                         } } )
     self:NetworkVar( "String",  0, "NWQuadMaterial",       { KeyName = "quad_material",     Edit = { type = "Generic", title = "Material/URL", order = 5, waitforenter = true     } } )
