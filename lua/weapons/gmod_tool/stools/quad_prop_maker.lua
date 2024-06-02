@@ -3,6 +3,11 @@ TOOL.Name = "Quad Prop Maker"
 
 TOOL.ClientConVar["double_sided"] = 0
 TOOL.ClientConVar["wall_dist"] = 1
+TOOL.ClientConVar["mat"] = ""
+TOOL.ClientConVar["color_r"] = 255
+TOOL.ClientConVar["color_g"] = 255
+TOOL.ClientConVar["color_b"] = 255
+TOOL.ClientConVar["color_a"] = 255
 
 TOOL.Information = {
     { name = "left_0", stage = 0, op = 0 },
@@ -34,6 +39,10 @@ if CLIENT then
 
     language.Add( "tool.quad_prop_maker.wall_dist", "Wall Distance" )
     language.Add( "tool.quad_prop_maker.wall_dist.help", "How far away from the wall/floor to spawn the quad prop" )
+
+    language.Add( "tool.quad_prop_maker.mat", "Material/URL" )
+
+    language.Add( "tool.quad_prop_maker.color", "Color to use when making quad props" )
 end
 
 
@@ -207,6 +216,8 @@ end
 function TOOL.BuildCPanel( cPanel )
     cPanel:AddControl( "CheckBox", { Label = "#tool.quad_prop_maker.double_sided", Command = "quad_prop_maker_double_sided", Help = false } )
     cPanel:AddControl( "Slider", { Label = "#tool.quad_prop_maker.wall_dist", Command = "quad_prop_maker_wall_dist", Type = "Float", Min = -10, Max = 10, Help = true } )
+    cPanel:AddControl( "TextBox", { Label = "#tool.quad_prop_maker.mat", Command = "quad_prop_maker_mat" } )
+    cPanel:ColorPicker( "#tool.quad_prop_maker.color", "quad_prop_maker_color_r", "quad_prop_maker_color_g", "quad_prop_maker_color_b", "quad_prop_maker_color_a" )
 end
 
 
@@ -343,6 +354,13 @@ function TOOL:MakeQuadProp( tr )
     ent:SetSquare( false )
     ent:SetSize( width, height )
     ent:SetDoubleSided( self:GetClientNumber( "double_sided", 0 ) ~= 0 )
+    ent:SetMaterial( self:GetClientInfo( "mat" ) )
+    ent:SetColor( Color(
+        self:GetClientNumber( "color_r", 255 ),
+        self:GetClientNumber( "color_g", 255 ),
+        self:GetClientNumber( "color_b", 255 ),
+        self:GetClientNumber( "color_a", 255 )
+    ) )
 
     owner:AddCount( "quad_prop", ent )
     owner:AddCleanup( "quad_prop", ent )
