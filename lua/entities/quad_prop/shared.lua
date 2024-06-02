@@ -159,8 +159,13 @@ function ENT:GetHeight()
 end
 
 function ENT:SetSize( width, height )
-    width = math.Clamp( width, 1, SIZE_MAX )
-    height = math.Clamp( height, 1, SIZE_MAX )
+    if QuadProps.ShouldLimitSizeForQuadProp( self ) then
+        width = math.Clamp( width, 1, SIZE_MAX )
+        height = math.Clamp( height, 1, SIZE_MAX )
+    else
+        width = math.max( width, 1 )
+        height = math.max( height, 1 )
+    end
 
     if self:IsSquare() then
         local minSize = math.min( width, height )

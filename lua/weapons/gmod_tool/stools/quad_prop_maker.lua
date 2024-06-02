@@ -228,6 +228,8 @@ function TOOL:CalcSpawnInfo( tr )
     local eyePos, eyeDir = getTraceStartAndDir( tr )
     if not eyePos then return end
 
+    local owner = self:GetOwner()
+
     if op == 1 then
         -- Use the first surface to orient the quad
         cornerPos2 = lineIntersectPlane( eyePos, eyeDir, cornerPos1, cornerNormal1 )
@@ -237,7 +239,7 @@ function TOOL:CalcSpawnInfo( tr )
 
         local upDir
 
-        if self:GetOwner():KeyDown( IN_USE ) then
+        if owner:KeyDown( IN_USE ) then
             -- Project the eye direction onto the plane and use it as the up direction
             -- Ideal for use on floors and ceilings
             upDir = eyeDir - eyeDir:Dot( cornerNormal1 ) * cornerNormal1 -- Project eyeDir onto the plane
@@ -258,7 +260,7 @@ function TOOL:CalcSpawnInfo( tr )
         local cornerPos3
 
         if stage == 1 then
-            if self:GetOwner():KeyDown( IN_USE ) then
+            if owner:KeyDown( IN_USE ) then
                 cornerPos3 = lineIntersectPlane( eyePos, eyeDir, cornerPos1, VECTOR_UP )
             else
                 local hitPos = tr.HitPos
@@ -309,7 +311,7 @@ function TOOL:CalcSpawnInfo( tr )
     if width < 1 or height < 1 then return end
 
     -- Clamp the size and adjust the position accordingly
-    if width > SIZE_MAX or height > SIZE_MAX then
+    if ( width > SIZE_MAX or height > SIZE_MAX ) and QuadProps.ShouldLimitSizeForPlayer( owner ) then
         width = mathMin( width, SIZE_MAX )
         height = mathMin( height, SIZE_MAX )
 
@@ -336,10 +338,11 @@ function TOOL:MakeQuadProp( tr )
     ent:SetAngles( ang )
     ent:Spawn()
 
+    if CPPI then ent:CPPISetOwner( owner ) end
+
     ent:SetSquare( false )
     ent:SetSize( width, height )
     ent:SetDoubleSided( self:GetClientNumber( "double_sided", 0 ) ~= 0 )
-    if CPPI then ent:CPPISetOwner( owner ) end
 
     owner:AddCount( "quad_prop", ent )
     owner:AddCleanup( "quad_prop", ent )
