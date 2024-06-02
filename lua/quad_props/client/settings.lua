@@ -3,7 +3,7 @@ QuadProps = QuadProps or {}
 
 local PLAYER_LIST_FILE_NAME = "quad_props_player_list.json"
 
-local BLOCK_ALL_URLS = CreateClientConVar( "quad_props_block_all_urls", "0", true, false, "If enabled, url quads will not load at all. This includes your quads and world-owned quads." )
+local BLOCK_ALL_URLS = CreateClientConVar( "quad_props_block_all_urls", "0", true, false, "If enabled, url quads will not load at all. This also includes your quads and world-owned quads." )
 local WHITELIST_MODE = CreateClientConVar( "quad_props_whitelist_mode", "0", true, false, "If enabled, url quads will load only from listed players. Otherwise, the list acts as a blacklist." )
 
 local whitelistMode = WHITELIST_MODE:GetBool()

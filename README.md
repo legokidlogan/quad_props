@@ -27,7 +27,7 @@ If your server uses [CFC HTTP Whitelist](https://github.com/CFC-Servers/cfc_cl_h
 
 | Convar | Description | Default |
 | :---: | :---: | :---: |
-| quad_props_block_all_urls | If enabled, url quads will not load at all. This includes your quads and world-owned quads. | 0 |
+| quad_props_block_all_urls | If enabled, url quads will not load at all. This also includes your quads and world-owned quads. | 0 |
 | quad_props_whitelist_mode | If enabled, url quads will load only from listed players. Otherwise, the list acts as a blacklist. | 0 |
 | sf_quadprops_max_cl | The max number of clientside quad props per player spawned via Starfall scripts. | 10 |
 
