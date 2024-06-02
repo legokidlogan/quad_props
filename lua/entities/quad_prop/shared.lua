@@ -114,8 +114,12 @@ end
 function ENT:TestCollision( startPos, delta, isbox )
     if isbox then return end
 
-    local hitPos, hitNormal, frac = util.IntersectRayWithOBB( startPos, delta, self:GetPos(), self:GetAngles(), self:OBBMins(), self:OBBMaxs() )
+    local ang = self:GetAngles()
+
+    local hitPos, hitNormal, frac = util.IntersectRayWithOBB( startPos, delta, self:GetPos(), ang, self:OBBMins(), self:OBBMaxs() )
     if not hitPos then return end
+
+    hitNormal:Rotate( ang ) -- Fix bug with util.IntersectRayWithOBB()
 
     return {
         HitPos = hitPos,
