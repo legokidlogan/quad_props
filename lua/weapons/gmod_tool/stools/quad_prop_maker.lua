@@ -206,7 +206,7 @@ end
 
 function TOOL.BuildCPanel( cPanel )
     cPanel:AddControl( "CheckBox", { Label = "#tool.quad_prop_maker.double_sided", Command = "quad_prop_maker_double_sided", Help = false } )
-    cPanel:AddControl( "Slider", { Label = "#tool.quad_prop_maker.wall_dist", Command = "quad_prop_maker_wall_dist", Type = "Float", Min = -1000, Max = 1000, Help = true } )
+    cPanel:AddControl( "Slider", { Label = "#tool.quad_prop_maker.wall_dist", Command = "quad_prop_maker_wall_dist", Type = "Float", Min = -100, Max = 100, Help = true } )
 end
 
 
