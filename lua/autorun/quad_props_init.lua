@@ -11,8 +11,8 @@ if cleanup then
 end
 
 
-AddCSLuaFile( "quad_props/create_meta.lua" )
 AddCSLuaFile( "quad_props/utils.lua" )
+AddCSLuaFile( "quad_props/create_meta.lua" )
 
 AddCSLuaFile( "quad_props/client/url_images.lua" )
 AddCSLuaFile( "quad_props/client/url_whitelist.lua" )
@@ -21,6 +21,7 @@ AddCSLuaFile( "quad_props/client/settings.lua" )
 
 
 include( "quad_props/utils.lua" )
+include( "quad_props/create_meta.lua" )
 
 if CLIENT then
     include( "quad_props/create_meta.lua" )
