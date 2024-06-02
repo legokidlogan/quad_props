@@ -46,12 +46,15 @@ if CLIENT then
 end
 
 
+include( "quad_props/globals.lua" )
+
+
 local VECTOR_ZERO = Vector( 0, 0, 0 )
 local VECTOR_UP = Vector( 0, 0, 1 )
 local VECTOR_UP_LONGER = Vector( 0, 0, 10 )
 local ANGLE_ZERO = Angle( 0, 0, 0 )
-local SIZE_MAX
-local THICKNESS
+local SIZE_MAX = QuadProps.SIZE_MAX
+local THICKNESS = QuadProps.THICKNESS
 
 local PREVIEW_MAT = CLIENT and Material( "color" )
 local PREVIEW_COLOR_BOX = Color( 255, 255, 255, 50 )
@@ -59,23 +62,11 @@ local PREVIEW_COLOR_BOX_WIREFRAME = Color( 255, 255, 255, 255 )
 local PREVIEW_COLOR_PLANE = Color( 0, 255, 255, 25 )
 local PREVIEW_COLOR_LINE = Color( 255, 255, 0, 255 )
 
-local PREVIEW_PLANE_MINS
-local PREVIEW_PLANE_MAXS
+local PREVIEW_PLANE_MINS = Vector( -SIZE_MAX, -SIZE_MAX, 0 )
+local PREVIEW_PLANE_MAXS = Vector( SIZE_MAX, SIZE_MAX, 0 )
 
 local mathAbs = math.abs
 local mathMin = math.min
-
-
-hook.Add( "InitPostEntity", "QuadProps_Tools_QuadPropMaker_LoadGlobals", function()
-    -- Apparently, stools load before the server can deliver AddCSLuaFile()'d files
-    include( "quad_props/globals.lua" )
-
-    SIZE_MAX = QuadProps.SIZE_MAX
-    THICKNESS = QuadProps.THICKNESS
-
-    PREVIEW_PLANE_MINS = Vector( -SIZE_MAX, -SIZE_MAX, 0 )
-    PREVIEW_PLANE_MAXS = Vector( SIZE_MAX, SIZE_MAX, 0 )
-end )
 
 
 local function mathSign( x )
