@@ -230,6 +230,8 @@ function TOOL:CalcSpawnInfo( tr )
 
     tr = tr or self:GetOwner():GetEyeTrace()
 
+    if not self.Objects[0] then return end -- Rare issue where the first object is missing, caused by severe realm desync
+
     local wallDist = self:GetClientNumber( "wall_dist", 1 )
     local cornerPos1 = self:GetPos( 0 )
     local cornerNormal1 = self:GetNormal( 0 )
