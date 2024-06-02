@@ -14,6 +14,24 @@ To protect against players loading IP grabbers on other clients, there is a simp
 If your server uses [CFC HTTP Whitelist](https://github.com/CFC-Servers/cfc_cl_http_whitelist), then it will defer to that instead, allowing for whitelist customization.
 
 
+## Server Convars
+
+| Convar | Description | Default |
+| :---: | :---: | :---: |
+| sbox_maxquad_prop | The max number of quad props per player. | 10 |
+| quad_props_size_limit_mode | 0 To always enforce size limit, 1 to ignore it on world-owned or superadmin-owned quad props (requires a prop protection addon), 2 to always ignore it. | 0 |
+| sf_quadprops_max | The max number of serverside quad props per player spawned via Starfall scripts. | 10 |
+
+
+## Client Convars
+
+| Convar | Description | Default |
+| :---: | :---: | :---: |
+| quad_props_block_all_urls | If enabled, url quads will not load at all. This includes your quads and world-owned quads. | 0 |
+| quad_props_whitelist_mode | If enabled, url quads will load only from listed players. Otherwise, the list acts as a blacklist. | 0 |
+| sf_quadprops_max_cl | The max number of clientside quad props per player spawned via Starfall scripts. | 10 |
+
+
 ## StarfallEX Support
 
 Quad props can be spawned both serverside and clientside in Starfall using `quadprop.create( pos, ang, width, height )`
