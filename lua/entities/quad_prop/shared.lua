@@ -13,6 +13,9 @@ ENT.Model           = "models/hunter/blocks/cube1x1x1.mdl"
 ENT.Editable        = true
 
 
+include( "quad_props/globals.lua" )
+
+
 local SIZE_MAX = QuadProps.SIZE_MAX
 local THICKNESS = QuadProps.THICKNESS
 

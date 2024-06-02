@@ -46,6 +46,9 @@ if CLIENT then
 end
 
 
+include( "quad_props/globals.lua" )
+
+
 local VECTOR_ZERO = Vector( 0, 0, 0 )
 local VECTOR_UP = Vector( 0, 0, 1 )
 local VECTOR_UP_LONGER = Vector( 0, 0, 10 )
