@@ -5,7 +5,11 @@ include( "shared.lua" )
 DEFINE_BASECLASS( "base_gmodentity" )
 
 
-local THICKNESS = 1
+include( "quad_props/globals.lua" )
+
+
+local THICKNESS = QuadProps.THICKNESS
+local RESIZE_COOLDOWN = QuadProps.RESIZE_COOLDOWN
 
 local THICKNESS_HALF = THICKNESS / 2
 
@@ -68,6 +72,8 @@ function ENT:GetMaterial()
 end
 
 function ENT:_SizeChanged()
+    if not self:_ResizeCooldownCheck() then return end
+
     local oldPhysObj = self:GetPhysicsObject()
     local motionEnabled = false
 
@@ -85,6 +91,40 @@ function ENT:_SizeChanged()
         physObj:EnableMotion( motionEnabled )
         physObj:Wake()
     end
+end
+
+-- Resize cooldown to prevent spamming the server with physics updates.
+function ENT:_ResizeCooldownCheck()
+    -- Already on full cooldown, disallow.
+    if self._quadProps_resizeCooldownFull then return false end
+
+    local resizeCooldownEndTime = self._quadProps_resizeCooldownEndTime
+    local now = CurTime()
+
+    if resizeCooldownEndTime then
+        -- Cooldown has expired, add cooldown and allow.
+        if now > resizeCooldownEndTime then
+            self._quadProps_resizeCooldownEndTime = now + RESIZE_COOLDOWN
+
+            return true
+        end
+
+        -- First time trying while on cooldown, mark as full and make a timer to update size when the cooldown ends.
+        self._quadProps_resizeCooldownFull = true
+
+        timer.Simple( resizeCooldownEndTime - now, function()
+            if not IsValid( self ) then return end
+
+            self._quadProps_resizeCooldownEndTime = nil
+            self._quadProps_resizeCooldownFull = nil
+            self:_SizeChanged()
+        end )
+    else
+        -- Hasn't been put on cooldown yet, add cooldown and allow.
+        self._quadProps_resizeCooldownEndTime = now + RESIZE_COOLDOWN
+    end
+
+    return true
 end
 
 function ENT:OnDuplicated( data )

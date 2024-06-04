@@ -6,6 +6,7 @@ QuadProps._globalsLoaded = true
 QuadProps.SIZE_MAX = 1000
 QuadProps.SIZE_ROUNDING = 3
 QuadProps.THICKNESS = 1
+QuadProps.RESIZE_COOLDOWN = 0.1
 
 
 CreateConVar( "sbox_maxquad_prop", 10, { FCVAR_ARCHIVE, FCVAR_REPLICATED }, "The max number of quad props per player.", 0, 1000 )
