@@ -4,6 +4,7 @@ if QuadProps._globalsLoaded then return end
 QuadProps._globalsLoaded = true
 
 QuadProps.SIZE_MAX = 1000
+QuadProps.SIZE_ROUNDING = 3
 QuadProps.THICKNESS = 1
 
 

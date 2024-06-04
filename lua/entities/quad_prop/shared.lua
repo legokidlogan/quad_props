@@ -17,9 +17,12 @@ include( "quad_props/globals.lua" )
 
 
 local SIZE_MAX = QuadProps.SIZE_MAX
+local SIZE_ROUNDING = QuadProps.SIZE_ROUNDING
 local THICKNESS = QuadProps.THICKNESS
 
 local THICKNESS_HALF = THICKNESS / 2
+
+local mathRound = math.Round
 
 local delaySizeUpdate
 
@@ -35,7 +38,8 @@ function ENT:SetupDataTables()
         -- gmod jank forcing my hand with all these timers...
         self:NetworkVarNotify( "NWQuadWidth", function( ent, _, _, width )
             if ent:GetNWQuadSquare() then
-                if ent:GetNWQuadHeight() == width then return end
+                width = mathRound( width, SIZE_ROUNDING )
+                if mathRound( ent:GetNWQuadHeight(), SIZE_ROUNDING ) == width then return end
 
                 timer.Simple( 0, function()
                     if not IsValid( ent ) then return end
@@ -50,7 +54,8 @@ function ENT:SetupDataTables()
 
         self:NetworkVarNotify( "NWQuadHeight", function( ent, _, _, height )
             if ent:GetNWQuadSquare() then
-                if ent:GetNWQuadWidth() == height then return end
+                height = mathRound( height, SIZE_ROUNDING )
+                if mathRound( ent:GetNWQuadWidth(), SIZE_ROUNDING ) == height then return end
 
                 timer.Simple( 0, function()
                     if not IsValid( ent ) then return end
