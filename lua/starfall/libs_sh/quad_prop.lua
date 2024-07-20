@@ -126,6 +126,16 @@ function quadprop_library.create( pos, ang, width, height, frozen )
         checkluatype( height, TYPE_NUMBER )
     end
 
+    local disallowReason = hook.Run( "QuadProps_Starfall_DisallowQuadPropCreate", ply, pos, ang, width, height, frozen )
+
+    if disallowReason then
+        if type( disallowReason ) == "string" then
+            SF.Throw( "Couldn't create the quadprop: " .. disallowReason, 2 )
+        else
+            SF.Throw( "Couldn't create the quadprop", 2 )
+        end
+    end
+
     entList:checkuse( ply, 1 )
 
     local qpEnt

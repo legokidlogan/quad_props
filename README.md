@@ -32,6 +32,13 @@ If your server uses [CFC HTTP Whitelist](https://github.com/CFC-Servers/cfc_cl_h
 | sf_quadprops_max_cl | The max number of clientside quad props per player spawned via Starfall scripts. | 10 |
 
 
+## Hooks
+
+- `QuadProps_Starfall_DisallowQuadPropCreate( ply, pos, ang, width, height, frozen )`
+  - SERVER and CLIENT realms.
+  - Return true (or a reason string) to prevent someone from creating a quad prop through Starfall.
+
+
 ## StarfallEX Support
 
 Quad props can be spawned both serverside and clientside in Starfall using `quadprop.create( pos, ang, width, height )`
