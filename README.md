@@ -21,6 +21,7 @@ If your server uses [CFC HTTP Whitelist](https://github.com/CFC-Servers/cfc_cl_h
 | sbox_maxquad_prop | The max number of quad props per player. | 10 |
 | quad_props_size_limit_mode | 0 To always enforce size limit, 1 to ignore it on world-owned or superadmin-owned quad props (requires a prop protection addon), 2 to always ignore it. | 0 |
 | sf_quadprops_max | The max number of serverside quad props per player spawned via Starfall scripts. | 10 |
+| quad_props_starfall_blocked_groups | A case-sensitive, comma-separated list of group/rank names to deny quadprop creation through Starfall. Example: 'user,regular' |  |
 
 
 ## Client Convars

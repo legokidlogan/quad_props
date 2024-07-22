@@ -1,6 +1,9 @@
 include( "quad_props/create_meta.lua" )
 
 
+-- Can't just use URS or CanTool as they're server-only, while Starfall can create quadprops in both realms.
+local BLOCKED_GROUPS = CreateConVar( "quad_props_starfall_blocked_groups", "", FCVAR_REPLICATED + FCVAR_ARCHIVE, "A case-sensitive, comma-separated list of group/rank names to deny quadprop creation through Starfall. Example: 'user,regular'" )
+
 local checkluatype = SF.CheckLuaType
 local registerprivilege = SF.Permissions.registerPrivilege
 local IsValid = FindMetaTable( "Entity" ).IsValid
@@ -10,6 +13,8 @@ registerprivilege( "quadprop.create", "Create quadprop", "Allows the user to cre
 registerprivilege( "quadprop.setRenderProperty", "RenderProperty", "Allows the user to change the rendering of an entity", { entities = {} } )
 
 local entList = SF.EntManager( "quadprops", "quadprops", 10, "The number of quadprops allowed to spawn via Starfall scripts for a single player" )
+local blockedGroupLookup = {}
+local blockedGroupLastVal = ""
 
 SF.ResourceCounters.QuadProps = { icon = "icon16/bricks.png", count = function( ply ) return entList:get( ply ) end }
 
@@ -44,6 +49,26 @@ SF.RegisterLibrary( "quadprop" )
 -- @libtbl quadprop_methods
 SF.RegisterType( "QuadProp", true, false, realQuadPropMeta, "Entity" )
 
+
+local function isInBlockedGroup( ply )
+    local listStr = BLOCKED_GROUPS:GetString()
+
+    -- Can't use a callback for client replicated cvars, gotta check if it's changed every time.
+    if blockedGroupLastVal ~= listStr then
+        blockedGroupLastVal = listStr
+        blockedGroupLookup = {}
+
+        local blockedGroups = string.Explode( ",", listStr, false )
+
+        for i = 1, #blockedGroups do
+            blockedGroupLookup[blockedGroups[i]] = true
+        end
+    end
+
+    if listStr == "" then return false end
+
+    return blockedGroupLookup[ply:GetUserGroup()] or false
+end
 
 
 return function( instance )
@@ -127,6 +152,10 @@ function quadprop_library.create( pos, ang, width, height, frozen )
     end
 
     local disallowReason = hook.Run( "QuadProps_Starfall_DisallowQuadPropCreate", ply, pos, ang, width, height, frozen )
+
+    if not disallowReason and isInBlockedGroup( ply ) then
+        disallowReason = "Your rank is not allowed to create quadprops"
+    end
 
     if disallowReason then
         if type( disallowReason ) == "string" then
