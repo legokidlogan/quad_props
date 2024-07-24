@@ -2,6 +2,7 @@ QuadProps = QuadProps or {}
 
 local TEXTURE_BLOCKED_PLAYER = GetRenderTarget( "quad_props_blocked_player", 128, 128 )
 local TEXTURE_BLOCKED_URL = GetRenderTarget( "quad_props_blocked_url", 128, 128 )
+local USE_AWESOMIUM_HACK = BRANCH == "unknown" or BRANCH == "dev" or BRANCH == "prerelease"
 
 local imageQueue = {}
 
@@ -205,6 +206,8 @@ doNextInQueue = function() -- Taken and cleaned up from StarfallEX
     end
 
     local function errorTexture()
+        if requestTbl.Expired then return end
+
         timer.Remove( "QuadProps_URLTextureTimeout" )
 
         timer.Simple( 0, function() -- Timer to prevent being in javascript stack frame
@@ -214,20 +217,51 @@ doNextInQueue = function() -- Taken and cleaned up from StarfallEX
         end )
     end
 
-    Panel:AddFunction( "quadProps", "imageLoaded", applyTexture )
-    Panel:AddFunction( "quadProps", "imageErrored", errorTexture )
-    Panel:RunJavascript(
-        [[img.removeAttribute("width");
-        img.removeAttribute("height");
-        img.style.left="0px";
-        img.style.top="0px";
-        img.src="]] .. string.JavascriptSafe( requestTbl.URL ) .. [[";]] ..
-        ( BRANCH == "unknown" and "\nif(img.complete)renderImage();" or "" )
-    )
-    Panel:Show()
+    local function startLoading()
+        Panel:AddFunction( "quadProps", "imageLoaded", applyTexture )
+        Panel:AddFunction( "quadProps", "imageErrored", errorTexture )
+        Panel:RunJavascript(
+            [[img.removeAttribute("width");
+            img.removeAttribute("height");
+            img.style.left="0px";
+            img.style.top="0px";
+            img.src="]] .. string.JavascriptSafe( requestTbl.URL ) .. [[";]] ..
+            ( BRANCH == "unknown" and "\nif(img.complete)renderImage();" or "" )
+        )
+        Panel:Show()
+    end
+
+
+    if USE_AWESOMIUM_HACK then
+        -- Awesomium hack taken from https://github.com/thegrb93/StarfallEx/pull/1702
+        http.Fetch(
+            requestTbl.URL,
+            function( body, _, headers, code )
+                if requestTbl.Expired then return end
+
+                if code >= 300 then
+                    errorTexture()
+
+                    return
+                end
+
+                local content_type = headers["Content-Type"] or headers["content-type"]
+                local data = util.Base64Encode( body, true )
+
+                requestTbl.URL = table.concat( { "data:", content_type, ";base64,", data } )
+                startLoading()
+            end,
+            function()
+                errorTexture()
+            end
+        )
+    else
+        startLoading()
+    end
 
     timer.Create( "QuadProps_URLTextureTimeout", 10, 1, function()
         processingRequest = false
+        requestTbl.Expired = true
 
         if requestTbl.Material then
             requestTbl.Material:SetTexture( "$basetexture", "error" )
