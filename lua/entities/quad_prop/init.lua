@@ -64,7 +64,10 @@ function ENT:SetCollisionGroup()
 end
 
 function ENT:SetMaterial( path )
-    self:SetNWQuadMaterial( path or "" )
+    path = path or ""
+    path = hook.Run( "QuadProps_SetMaterial", ent, path ) or path
+
+    self:SetNWQuadMaterial( path )
 end
 
 function ENT:GetMaterial()

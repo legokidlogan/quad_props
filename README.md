@@ -38,6 +38,9 @@ If your server uses [CFC HTTP Whitelist](https://github.com/CFC-Servers/cfc_cl_h
 - `QuadProps_Starfall_DisallowQuadPropCreate( ply, pos, ang, width, height, frozen )`
   - SERVER and CLIENT realms.
   - Return true (or a reason string) to prevent someone from creating a quad prop through Starfall.
+- `QuadProps_SetMaterial( ent, path )`
+  - SERVER realm.
+  - Return a string to override the path.
 
 
 ## StarfallEX Support
