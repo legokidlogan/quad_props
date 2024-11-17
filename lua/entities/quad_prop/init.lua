@@ -65,7 +65,7 @@ end
 
 function ENT:SetMaterial( path )
     path = path or ""
-    path = hook.Run( "QuadProps_SetMaterial", ent, path ) or path
+    path = hook.Run( "QuadProps_SetMaterial", self, path ) or path
 
     self:SetNWQuadMaterial( path )
 end
