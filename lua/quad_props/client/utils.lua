@@ -119,7 +119,7 @@ makeUnlitCopy = function( mat, path )
     local refMat = Material( path )
     local tex = refMat:GetTexture( "$basetexture" )
 
-    local refFlags = refMat:GetInt( "$flags" )
+    local refFlags = refMat:GetInt( "$flags" ) or 0
     local selfillum = bit.band( refFlags, 64 )
     local additive = bit.band( refFlags, 128 )
     local alphatest = bit.band( refFlags, 256 )
