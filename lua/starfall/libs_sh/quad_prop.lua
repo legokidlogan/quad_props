@@ -120,7 +120,7 @@ end
 -- @return QuadProp QuadProp instance
 function ents_methods:toQuadProp()
     local ent = getent( self )
-    if not ent.IsSFQuadProp then SF.Throw( "The entity isn't a quadprop", 2 ) end
+    if ent:GetClass() ~= "quad_prop" then SF.Throw( "The entity isn't a quadprop", 2 ) end
     return wrap( eunwrap( self ) )
 end
 
@@ -495,7 +495,7 @@ function quadprop_methods:remove()
     if CLIENT and instance.data.render.isRendering then SF.Throw( "Cannot remove while in rendering hook!", 2 ) end
 
     local quadProp = getQP( self )
-    if not ( IsValid( quadProp ) and quadProp.IsSFQuadProp ) then SF.Throw( "Invalid quadprop!", 2 ) end
+    if not ( IsValid( quadProp ) and quadProp:GetClass() == "quad_prop" ) then SF.Throw( "Invalid quadprop!", 2 ) end
 
     checkpermission( instance, quadProp, "quadprop.create" )
     entList:remove( instance, quadProp )
